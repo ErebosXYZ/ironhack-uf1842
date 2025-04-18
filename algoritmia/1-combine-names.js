@@ -8,7 +8,8 @@
  */
 
 function combineNames(name1, name2) {
-
+    let names = name1 + " " + name2; 
+    return names;
 }
 
 console.log(combineNames('James', 'Stevens')); // "James Stevens"
