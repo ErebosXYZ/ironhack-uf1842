@@ -13,7 +13,7 @@
         <div>
             <label for="username">Enter GitHub username:</label>
             <input type="text" id="username" name="username">
-            <button>Get Info</button>
+            <button id="get-info">Get Info</button>
         </div>
         <table>
             <thead>
@@ -34,6 +34,28 @@
             </tbody>
         </table>
     </main>
+    <script>
+        const getInfo = document.querySelector("#get-info");
+        const username = document.querySelector("#username");
+        const fullName = document.querySelector("#fullName");
+        const bio = document.querySelector("#bio");
+        const profilePicture = document.querySelector("#profilePicture");
+        const homeUrl = document.querySelector("#homeUrl");
+
+        getInfo.addEventListener("click", async () => {
+            const inputUsername = String(username.value);
+            console.log(inputUsername);
+            const response = await fetch(`https://api.github.com/users/${inputUsername}`)
+
+            const data = await response.json();
+            console.log(data);
+
+            fullName.textContent = data.name;
+            bio.textContent = data.bio;
+            profilePicture.src = data.avatar_url; 
+            homeUrl.textContent = data.html_url;
+        })
+    </script>
 </body>
 
 </html>
