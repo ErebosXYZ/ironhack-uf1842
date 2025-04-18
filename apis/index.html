@@ -14,6 +14,7 @@
             <label for="username">Enter GitHub username:</label>
             <input type="text" id="username" name="username">
             <button id="get-info">Get Info</button>
+            <p id="error-message" style="color:tomato; margin-top: 1rem"></p>
         </div>
         <table>
             <thead>
@@ -41,19 +42,31 @@
         const bio = document.querySelector("#bio");
         const profilePicture = document.querySelector("#profilePicture");
         const homeUrl = document.querySelector("#homeUrl");
+        const errorMessage = document.querySelector("#error-message");
 
         getInfo.addEventListener("click", async () => {
             const inputUsername = String(username.value);
             console.log(inputUsername);
-            const response = await fetch(`https://api.github.com/users/${inputUsername}`)
+            errorMessage.textContent = "";
 
-            const data = await response.json();
-            console.log(data);
+            try {
+                const response = await fetch(`https://api.github.com/users/${inputUsername}`);
 
-            fullName.textContent = data.name;
-            bio.textContent = data.bio;
-            profilePicture.src = data.avatar_url; 
-            homeUrl.textContent = data.html_url;
+                if (!response.ok) {
+                    throw new Error("User not found!");
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                fullName.textContent = data.name;
+                bio.textContent = data.bio;
+                profilePicture.src = data.avatar_url;
+                homeUrl.textContent = data.html_url;
+            } catch (error) {
+                errorMessage.textContent = error.message;
+            }
+            
         })
     </script>
 </body>
